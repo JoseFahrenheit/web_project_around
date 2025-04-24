@@ -2,6 +2,9 @@
   width: 100%;
   max-width: 880px;
   margin: 67px auto 0;
+}
+
+.footer__copyright {
   font-family: "Inter";
   font-size: 18px;
   font-weight: normal;

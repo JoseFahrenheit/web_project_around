@@ -157,7 +157,7 @@
               class="element_rectangle"
             />
             <div class="element__footer">
-              <p class="element__paragraph">Vanois National...</p>
+              <p class="element__paragraph">Vanois National Park</p>
               <img
                 src="./images/element_Vector.svg"
                 alt="Ilustración 'like'"
@@ -191,5 +191,35 @@
         <p class="footer__copyright">© 2025 Around The U.S.</p>
       </footer>
     </div>
+    <div class="popup" id="edit-profile-popup">
+      <div class="popup__container">
+        <img
+          src="./images/close.png"
+          alt="Ilustración 'Close'"
+          class="popup__close"
+        />
+        <h2 class="popup__title">Editar Perfil</h2>
+        <form class="popup__form">
+          <input
+            type="text"
+            name="name"
+            class="popup__input"
+            placeholder="Nombre"
+            required
+          />
+          <input
+            type="text"
+            name="about"
+            class="popup__input"
+            placeholder="Acerca de mí"
+            required
+          />
+          <button type="submit" class="popup__save-button" disabled>
+            Guardar
+          </button>
+        </form>
+      </div>
+    </div>
+    <script src="./scripts/index.js"></script>
   </body>
 </html>
