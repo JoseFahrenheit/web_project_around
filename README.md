@@ -9,7 +9,7 @@ La página web de Alrededor de los EE.UU. es el septimo proyecto en el programa 
 # Proyecto desplegado
 
 Puedes ver la versión final del proyecto en GitHub Pages aquí:
-https://github.com/JoseFahrenheit/web_project_around.git
+https://josefahrenheit.github.io/web_project_around/
 
 ## Características del proyecto
 
