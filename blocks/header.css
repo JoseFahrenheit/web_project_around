@@ -1,5 +1,15 @@
 .header {
   width: 880px;
   height: 74px;
+  margin-top: 45px;
   margin-bottom: 40px;
+}
+
+@media screen and (max-width: 543px) {
+  .header {
+    width: 320px;
+    height: 56px;
+    margin-top: 28px;
+    margin-bottom: 42px;
+  }
 }

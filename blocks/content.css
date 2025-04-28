@@ -2,3 +2,12 @@
   width: 880px;
   height: 913px;
 }
+
+@media screen and (max-width: 543px) {
+  .content {
+    width: 100%;
+    height: auto;
+    max-width: 282px;
+    margin-top: 42px;
+  }
+}

@@ -14,3 +14,24 @@
   align-self: flex-start;
   padding-left: 0;
 }
+
+@media screen and (max-width: 543px) {
+  .footer {
+    width: 100%;
+    max-width: 282px;
+    height: auto;
+    margin: 50px auto 0;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .footer__copyright {
+    font-family: "Inter";
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.63;
+    color: #545454;
+    text-align: left;
+    padding: 0;
+  }
+}

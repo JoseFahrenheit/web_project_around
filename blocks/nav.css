@@ -1,5 +1,44 @@
+.nav {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
 .nav__vector {
   width: 173px;
   height: 33px;
   margin-bottom: 41px;
+}
+
+.nav__linea {
+  width: 100%;
+  height: 1px;
+  background-color: white;
+}
+
+@media screen and (max-width: 543px) {
+  .nav {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+  }
+
+  .nav__vector {
+    width: 126px;
+    height: 24px;
+    margin-bottom: 32px;
+    margin-left: 27px;
+  }
+
+  .nav__linea {
+    max-width: 100vw;
+    height: 1px;
+    background-color: white;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+  }
 }
