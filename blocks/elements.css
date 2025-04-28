@@ -10,6 +10,19 @@
   padding: 0;
 }
 
+@media screen and (min-width: 544px) and (max-width: 1023px) {
+  .elements {
+    width: 100%;
+    max-width: 768px;
+    margin: 36px auto 0;
+    padding: 0 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+}
+
 @media screen and (max-width: 543px) {
   .elements {
     width: 100%;

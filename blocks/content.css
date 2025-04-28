@@ -3,6 +3,13 @@
   height: 913px;
 }
 
+@media screen and (min-width: 544px) and (max-width: 1023px) {
+  .content {
+    width: 100%;
+    max-width: 768px;
+  }
+}
+
 @media screen and (max-width: 543px) {
   .content {
     width: 100%;
