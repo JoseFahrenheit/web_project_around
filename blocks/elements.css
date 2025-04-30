@@ -14,12 +14,12 @@
   .elements {
     width: 100%;
     max-width: 768px;
-    margin: 36px auto 0;
-    padding: 0 20px;
-    display: flex;
-    flex-wrap: wrap;
+    height: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 282px);
     justify-content: center;
-    gap: 20px;
+    margin: 36px auto 0;
+    padding: 0;
   }
 }
 

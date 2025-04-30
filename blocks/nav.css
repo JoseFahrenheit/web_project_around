@@ -17,6 +17,31 @@
   background-color: white;
 }
 
+@media screen and (min-width: 544px) and (max-width: 1023px) {
+  .nav {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav__vector {
+    width: 173px;
+    height: 33px;
+    margin-left: 0;
+    margin-bottom: 41px;
+  }
+
+  .nav__linea {
+    width: 100%;
+    height: 1px;
+    background-color: white;
+    position: relative;
+    left: -20px;
+    bottom: 0;
+  }
+}
+
 @media screen and (max-width: 543px) {
   .nav {
     width: 100%;

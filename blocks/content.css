@@ -6,7 +6,9 @@
 @media screen and (min-width: 544px) and (max-width: 1023px) {
   .content {
     width: 100%;
+    height: auto;
     max-width: 768px;
+    margin-top: 42px;
   }
 }
 
