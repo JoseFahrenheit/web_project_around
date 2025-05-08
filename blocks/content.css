@@ -1,6 +1,6 @@
 .content {
   width: 880px;
-  height: 913px;
+  height: auto;
 }
 
 @media screen and (min-width: 544px) and (max-width: 1023px) {

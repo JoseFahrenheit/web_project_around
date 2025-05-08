@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="proyecto de Figma" />
+    <meta name="description" content="Proyecto de Figma" />
     <meta name="author" content="José Carlos Hernández Calderón" />
     <meta name="keywords" content="Alrededor de los EE.UU." />
     <title>Alrededor de los EE.UU.</title>
@@ -64,128 +64,7 @@
             />
           </div>
         </section>
-        <section class="elements">
-          <div class="element">
-            <img
-              src="./images/yosemite.jpg"
-              alt="Ilustración 'kirill'"
-              class="element__image"
-            />
-            <img
-              src="./images/element_Rectangle.png"
-              alt="Ilustración 'Rectangulo'"
-              class="element__rectangle"
-            />
-            <div class="element__footer">
-              <p class="element__paragraph">Valle de Yosemite</p>
-              <img
-                src="./images/element_Vector.svg"
-                alt="Ilustración 'like'"
-                class="element__vector"
-              />
-            </div>
-          </div>
-          <div class="element">
-            <img
-              src="./images/louise.png"
-              alt="Ilustración 'Lago Louise'"
-              class="element__image"
-            />
-            <img
-              src="./images/element_Rectangle.png"
-              alt="Ilustración 'Rectangulo'"
-              class="element__rectangle"
-            />
-            <div class="element__footer">
-              <p class="element__paragraph">Lago Louise</p>
-              <img
-                src="./images/element_Vector.svg"
-                alt="Ilustración 'like'"
-                class="element__vector"
-              />
-            </div>
-          </div>
-          <div class="element">
-            <img
-              src="./images/calvas.png"
-              alt="Ilustración 'Montañas Calvas'"
-              class="element__image"
-            />
-            <img
-              src="./images/element_Rectangle.png"
-              alt="Ilustración 'Rectangulo'"
-              class="element__rectangle"
-            />
-            <div class="element__footer">
-              <p class="element__paragraph">Montañas Calvas</p>
-              <img
-                src="./images/element_Vector.svg"
-                alt="Ilustración 'like'"
-                class="element__vector"
-              />
-            </div>
-          </div>
-          <div class="element">
-            <img
-              src="./images/latemar.png"
-              alt="Ilustración 'Vanois National'"
-              class="element__image"
-            />
-            <img
-              src="./images/element_Rectangle.png"
-              alt="Ilustración 'Rectangulo'"
-              class="element__rectangle"
-            />
-            <div class="element__footer">
-              <p class="element__paragraph">Latemar</p>
-              <img
-                src="./images/element_Vector.svg"
-                alt="Ilustración 'like'"
-                class="element__vector"
-              />
-            </div>
-          </div>
-          <div class="element">
-            <img
-              src="./images/vanoispng.png"
-              alt="Ilustración 'Vanois National'"
-              class="element__image"
-            />
-            <img
-              src="./images/element_Rectangle.png"
-              alt="Ilustración 'Rectangulo'"
-              class="element__rectangle"
-            />
-            <div class="element__footer">
-              <p class="element__paragraph">Vanois National Park</p>
-              <img
-                src="./images/element_Vector.svg"
-                alt="Ilustración 'like'"
-                class="element__vector"
-              />
-            </div>
-          </div>
-          <div class="element">
-            <img
-              src="./images/braies.png"
-              alt="Ilustración 'Lago di Braies'"
-              class="element__image"
-            />
-            <img
-              src="./images/element_Rectangle.png"
-              alt="Ilustración 'Rectangulo'"
-              class="element__rectangle"
-            />
-            <div class="element__footer">
-              <p class="element__paragraph">Lago di Braies</p>
-              <img
-                src="./images/element_Vector.svg"
-                alt="Ilustración 'like'"
-                class="element__vector"
-              />
-            </div>
-          </div>
-        </section>
+        <section class="elements"></section>
       </main>
       <footer class="footer">
         <p class="footer__copyright">&copy; 2025 Around The U.S.</p>
@@ -216,6 +95,35 @@
           />
           <button type="submit" class="popup__save-button" disabled>
             Guardar
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="popup" id="add-element-popup">
+      <div class="popup__container">
+        <img
+          src="./images/close.png"
+          alt="Ilustración 'Close'"
+          class="popup__close"
+        />
+        <h2 class="popup__title">Nuevo Lugar</h2>
+        <form class="popup__form">
+          <input
+            type="text"
+            name="title"
+            class="popup__input"
+            placeholder="Título"
+            required
+          />
+          <input
+            type="text"
+            name="link"
+            class="popup__input"
+            placeholder="Enlace a la imagen"
+            required
+          />
+          <button type="submit" class="popup__save-button" disabled>
+            Crear
           </button>
         </form>
       </div>
