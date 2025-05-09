@@ -17,6 +17,27 @@
   position: relative;
   object-fit: cover;
   z-index: 1;
+  cursor: pointer;
+}
+
+.element__delete {
+  width: 18px;
+  height: 19.3px;
+  position: absolute;
+  top: 18px;
+  right: 15px;
+  background-image: url('../images/trash.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+.element__delete:hover {
+  opacity: 60%;
 }
 
 .element__rectangle {
@@ -82,6 +103,27 @@
     position: relative;
     object-fit: cover;
     z-index: 1;
+    cursor: pointer;
+  }
+
+  .element__delete {
+    width: 18px;
+    height: 19.3px;
+    position: absolute;
+    top: 18px;
+    right: 15px;
+    background-image: url('../images/trash.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+  }
+
+  .element__delete:hover {
+    opacity: 60%;
   }
 
   .element__rectangle {
@@ -149,6 +191,27 @@
     position: relative;
     object-fit: cover;
     z-index: 1;
+    cursor: pointer;
+  }
+
+  .element__delete {
+    width: 18px;
+    height: 19.3px;
+    position: absolute;
+    top: 18px;
+    right: 15px;
+    background-image: url('../images/trash.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    z-index: 2;
+  }
+
+  .element__delete:hover {
+    opacity: 60%;
   }
 
   .element__rectangle {
