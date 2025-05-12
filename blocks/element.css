@@ -69,18 +69,23 @@
 }
 
 .element__vector {
-  width: 21px;
+  width: 22px;
   height: 19px;
+  background-image: url('../images/element_Vector.svg');
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
   cursor: pointer;
+  transition: opacity 0.3s ease;
 }
 
 .element__vector:hover {
-  opacity: 60%;
+  opacity: 0.5;
 }
 
 .element__vector_active {
-  fill: #000;
-  transform: scale(1.1);
+  background-image: url('../images/Union.png');
 }
 
 @media screen and (min-width: 544px) and (max-width: 1023px) {

@@ -72,28 +72,42 @@
     </div>
     <div class="popup" id="edit-profile-popup">
       <div class="popup__container">
-        <img
-          src="./images/close.png"
-          alt="Ilustración 'Close'"
-          class="popup__close"
-        />
+        <button type="button" class="popup__close" aria-label="Cerrar"></button>
         <h2 class="popup__title">Editar Perfil</h2>
-        <form class="popup__form">
-          <input
-            type="text"
-            name="name"
-            class="popup__input"
-            placeholder="Nombre"
-            required
-          />
-          <input
-            type="text"
-            name="about"
-            class="popup__input"
-            placeholder="Acerca de mí"
-            required
-          />
-          <button type="submit" class="popup__save-button" disabled>
+        <form class="popup__form" id="profile-form" novalidate>
+          <div style="position: relative; height: 57.26px">
+            <input
+              type="text"
+              name="name"
+              id="name-input"
+              class="popup__input"
+              placeholder="Nombre"
+              required
+              minlength="2"
+              maxlength="40"
+              title="Por favor, rellene este campo"
+            />
+            <span class="popup__error name-input-error"></span>
+          </div>
+          <div style="position: relative; height: 57.26px">
+            <input
+              type="text"
+              name="about"
+              id="about-input"
+              class="popup__input"
+              placeholder="Acerca de mí"
+              required
+              minlength="2"
+              maxlength="200"
+              title="Por favor, rellene este campo"
+            />
+            <span class="popup__error about-input-error"></span>
+          </div>
+          <button
+            type="submit"
+            class="popup__save-button popup__button_disabled"
+            disabled
+          >
             Guardar
           </button>
         </form>
@@ -101,28 +115,38 @@
     </div>
     <div class="popup" id="add-element-popup">
       <div class="popup__container">
-        <img
-          src="./images/close.png"
-          alt="Ilustración 'Close'"
-          class="popup__close"
-        />
+        <button type="button" class="popup__close" aria-label="Cerrar"></button>
         <h2 class="popup__title">Nuevo Lugar</h2>
-        <form class="popup__form">
+        <form class="popup__form" id="card-form" novalidate>
           <input
             type="text"
             name="title"
+            id="title-input"
             class="popup__input"
             placeholder="Título"
             required
+            minlength="2"
+            maxlength="30"
+            title="Por favor, rellene este campo"
           />
-          <input
-            type="text"
-            name="link"
-            class="popup__input"
-            placeholder="Enlace a la imagen"
-            required
-          />
-          <button type="submit" class="popup__save-button" disabled>
+          <span class="popup__error title-input-error"></span>
+          <div style="position: relative; height: 57.26px">
+            <input
+              type="url"
+              name="link"
+              id="link-input"
+              class="popup__input"
+              placeholder="Enlace a la imagen"
+              required
+              title="Por favor, introduce una dirección web"
+            />
+            <span class="popup__error link-input-error"></span>
+          </div>
+          <button
+            type="submit"
+            class="popup__save-button popup__button_disabled"
+            disabled
+          >
             Crear
           </button>
         </form>
@@ -130,11 +154,47 @@
     </div>
     <div class="popup" id="image-popup">
       <div class="popup__image-container">
-        <img src="./images/close.png" alt="cerrar" class="popup__close" />
+        <button type="button" class="popup__close" aria-label="Cerrar"></button>
         <img src="" alt="Imagen ampliada" class="popup__image" />
         <p class="popup__caption"></p>
       </div>
     </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const inputs = document.querySelectorAll(
+          "input[required], input[minlength]"
+        );
+
+        inputs.forEach((input) => {
+          let message = "Por favor, rellene este campo";
+
+          if (input.type === "url") {
+            message = "Por favor, introduce una dirección web";
+          }
+
+          input.oninvalid = function (e) {
+            e.target.setCustomValidity("");
+
+            if (!e.target.validity.valid) {
+              if (e.target.validity.tooShort) {
+                const min = e.target.getAttribute("minlength");
+                e.target.setCustomValidity(`Mínimo ${min} caracteres`);
+              } else if (e.target.validity.typeMismatch) {
+                e.target.setCustomValidity(
+                  "Introduce una dirección web válida"
+                );
+              } else {
+                e.target.setCustomValidity(message);
+              }
+            }
+          };
+
+          input.oninput = function (e) {
+            e.target.setCustomValidity("");
+          };
+        });
+      });
+    </script>
     <script src="./scripts/index.js"></script>
   </body>
 </html>
