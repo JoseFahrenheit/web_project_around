@@ -1,3 +1,31 @@
+document.addEventListener("DOMContentLoaded", function() {
+  const inputs = document.querySelectorAll("inputs[required], input[minlength]");
+  inputs.forEach((input) => {
+    let message = "Por favor, rellene este campo";
+    if (input.type === "url") {
+      message = "Por favor, introduce una direccion web";
+    }
+
+    input.oninvalid = function (e) {
+      e.target.setCustomValidity("");
+      if (!e.target.validity.valid) {
+        if (e.target.validity.tooShort) {
+          const min = e.target.getAttribute("minlength");
+          e.target.setCustomValidity(`Mínimo ${min} caracteres`);
+        } else if (e.target.validity.typeMismatch) {
+          e.target.setCustomValidity("Introduce una dirección web válida");
+        } else {
+          e.target.setCustomValidity(message);
+        }
+      }
+    };
+
+    input.oninput = function (e) {
+      e.target.setCustomValidity("");
+    };
+  });
+});
+
 const validationConfig = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -89,18 +117,10 @@ function openProfilePopup() {
   openPopup(profilePopup);
 }
 
-function closeProfilePopup() {
-  closePopup(profilePopup);
-}
-
 function openAddCardPopup() {
   addCardForm.reset();
   clearValidation(addCardForm, validationConfig);
   openPopup(addCardPopup);
-}
-
-function closeAddCardPopup() {
-  closePopup(addCardPopup);
 }
 
 function openImagePopup(src, alt) {
@@ -110,34 +130,27 @@ function openImagePopup(src, alt) {
   openPopup(imagePopup);
 }
 
-function closeImagePopupHandler() {
-  closePopup(imagePopup);
-}
-
 function createCard(cardData) {
-  const cardElement = document.createElement('div');
-  cardElement.classList.add('element');
-
-  cardElement.innerHTML = `
-    <img src="${cardData.link}" alt="${cardData.name}" class="element__image">
-    <button type="button" class="element__delete"></button>
-    <div class="element__footer">
-      <p class="element__paragraph">${cardData.name}</p>
-      <button type="button" class="element__vector"></button>
-    </div>
-  `;
+  const template = document.getElementById('card-template');
+  const cardElement = template.content.cloneNode(true).querySelector('.element');
 
   const cardImage = cardElement.querySelector('.element__image');
+  const cardTitle = cardElement.querySelector('.element__paragraph');
+  const likeButton = cardElement.querySelector('.element__vector');
+  const deleteButton = cardElement.querySelector('.element__delete');
+
+  cardImage.src = cardData.link;
+  cardImage.alt = cardData.name;
+  cardTitle.textContent = cardData.name;
+
   cardImage.addEventListener('click', () => {
     openImagePopup(cardData.link, cardData.name);
   });
 
-  const likeButton = cardElement.querySelector('.element__vector');
   likeButton.addEventListener('click', () => {
     likeButton.classList.toggle('element__vector_active');
   });
 
-  const deleteButton = cardElement.querySelector('.element__delete');
   deleteButton.addEventListener('click', () => {
     cardElement.remove();
   });
@@ -156,7 +169,7 @@ function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   profileName.textContent = nameInput.value;
   profileJob.textContent = aboutInput.value;
-  closeProfilePopup();
+  closePopup(profilePopup);
 }
 
 function handleAddCardSubmit(evt) {
@@ -169,7 +182,7 @@ function handleAddCardSubmit(evt) {
 
   const newCard = createCard(newCardData);
   cardsContainer.prepend(newCard);
-  closeAddCardPopup();
+  closePopup(addCardPopup);
 }
 
 function showInputError(formElement, inputElement, errorMessage, settings) {
@@ -247,14 +260,14 @@ function clearValidation(formElement, settings) {
 }
 
 editButton.addEventListener('click', openProfilePopup);
-closeProfileButton.addEventListener('click', closeProfilePopup);
+closeProfileButton.addEventListener('click', () => closePopup(profilePopup));
 profilePopup.addEventListener('click', closePopupByOverlay);
 
 addButton.addEventListener('click', openAddCardPopup);
-closeAddCardButton.addEventListener('click', closeAddCardPopup);
+closeAddCardButton.addEventListener('click', () => closePopup(addCardPopup));
 addCardPopup.addEventListener('click', closePopupByOverlay);
 
-closeImagePopup.addEventListener('click', closeImagePopupHandler);
+closeImagePopup.addEventListener('click', () => closePopup(imagePopup));
 imagePopup.addEventListener('click', closePopupByOverlay);
 
 profileForm.addEventListener('submit', handleProfileFormSubmit);
