@@ -5,6 +5,7 @@ import { PopupWithImage } from "../components/PopupWithImage.js";
 import { PopupWithForm } from "../components/PopupWithForm.js";
 import { UserInfo } from "../components/UserInfo.js";
 import { Api } from "../components/Api.js";
+import { PopupWithConfirmation } from "../components/PopupWithConfirmation.js";
 
 const validationConfig = {
   formSelector: '.popup__form',
@@ -110,6 +111,24 @@ const addCardPopupInstance = new PopupWithForm(
   }
 );
 
+const deleteCardPopupInstance = new PopupWithConfirmation(
+  '#delete-card-popup',
+  (cardId, cardElement) => {
+    deleteCardPopupInstance.setLoadingState(true);
+    api.deleteCard(cardId)
+      .then(() => {
+        cardElement.remove();
+        deleteCardPopupInstance.close();
+      })
+      .catch(err => {
+        console.error('Error al eliminar tarjeta:', err);
+      })
+      .finally(() => {
+        deleteCardPopupInstance.setLoadingState(false);
+      });
+  }
+);
+
 const imagePopupInstance = new PopupWithImage('#image-popup');
 
 const cardSection = new Section(
@@ -125,7 +144,8 @@ const cardSection = new Section(
         },
         '#card-template',
         (src, alt) => imagePopupInstance.open({ src, alt}),
-        (cardId, isLiked) => api.toggleLike(cardId, isLiked)
+        (cardId, isLiked) => api.toggleLike(cardId, isLiked),
+        (cardId, cardElement) => deleteCardPopupInstance.open(cardId, cardElement)
       ).generateCard();
       cardSection.addItem(card);
     }
@@ -155,6 +175,7 @@ document.querySelector('.profile__add-button').addEventListener('click', openAdd
 profilePopupInstance.setEventListeners();
 addCardPopupInstance.setEventListeners();
 imagePopupInstance.setEventListeners();
+deleteCardPopupInstance.setEventListeners();
 
 profileFormValidator.enableValidation();
 cardFormValidator.enableValidation();
