@@ -25,12 +25,14 @@ export class PopupWithForm extends Popup {
     });
   }
 
+  setLoadingState(isLoading, buttonText = 'Guardar') {
+    this._submitButton.textContent = isLoading ? 'Guardando...' : buttonText;
+    this._submitButton.disabled = isLoading;
+  }
+
   close() {
     super.close();
     this._form.reset();
-  }
-
-  setLoadingState(isLoading, buttonText = 'Guardar') {
-    this._submitButton.textContent = isLoading ? 'Guardando...' : buttonText;
+    this._setLoadingState(false);
   }
 }

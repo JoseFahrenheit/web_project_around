@@ -156,6 +156,20 @@
   border-bottom-color: #FF0000;
 }
 
+#delete-card-popup .popup__container {
+  max-width: 430px;
+}
+
+#delete-card-popup .popup__title {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#delete-card-popup .popup__save-button {
+  width: 100%;
+  margin-top: 0;
+}
+
 @media screen and (min-width: 544px) and (max-width: 1023px) {
   .popup {
     width: 100%;

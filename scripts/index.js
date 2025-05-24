@@ -4,6 +4,7 @@ import { Section } from "../components/Section.js";
 import { PopupWithImage } from "../components/PopupWithImage.js";
 import { PopupWithForm } from "../components/PopupWithForm.js";
 import { UserInfo } from "../components/UserInfo.js";
+import { Api } from "../components/Api.js";
 
 const validationConfig = {
   formSelector: '.popup__form',
@@ -14,32 +15,98 @@ const validationConfig = {
   errorClass: 'popup__error_visible'
 };
 
+const api = new Api({
+  baseUrl: "https://around-api.es.tripleten-services.com/v1",
+  headers: {
+    authorization: "02c5cb3d-f95a-461a-a48e-8ed3895c99a5",
+    "Content-Type": "application/json"
+  }
+});
+
 const userInfo = new UserInfo({
   userNameSelector: '.profile__name',
-  userJobSelector: '.profile__job'
+  userJobSelector: '.profile__job',
+  userAvatarSelector: '.profile__avatar'
 });
+
+function loadAllData() {
+  return Promise.all([
+    api.getUserInfo(),
+    api.getInitialCards()
+  ])
+  .then(([userData, cardsData]) => {
+    userInfo.setUserInfo({
+      name: userData.name,
+      job: userData.about,
+      avatar: userData.avatar
+    });
+    return cardsData;
+  })
+  .catch(err => {
+    console.error('Error al cargar datos:', err);
+    userInfo.setUserInfo({
+      name: 'Jacques Cousteau',
+      job: 'Explorador',
+      avatar: 'https://practicum-content.s3.us-west-1.amazonaws.com/frontend-developer/common/avatar.jpg'
+    });
+    return [];
+  });
+}
 
 const profilePopupInstance = new PopupWithForm(
   '#edit-profile-popup',
   (formData) => {
-    userInfo.setUserInfo({
+    profilePopupInstance.setLoadingState(true);
+    api.updateUserInfo({
       name: formData.name,
-      job: formData.about
+      about: formData.about
+    })
+    .then(updatedData => {
+      userInfo.setUserInfo({
+        name: updatedData.name,
+        job: updatedData.about,
+        avatar: updatedData.avatar
+      });
+      profilePopupInstance.close();
+    })
+    .catch(err => {
+      console.error('Error al actualizar perfil:', err);
+    })
+    .finally(() => {
+      profilePopupInstance.setLoadingState(false);
     });
-    profilePopupInstance.close();
   }
 );
 
 const addCardPopupInstance = new PopupWithForm(
   '#add-element-popup',
   (formData) => {
-    const newCard = new Card(
-      { name: formData.title, link: formData.link },
-      '#card-template',
-      (src, alt) => imagePopupInstance.open({src, alt})
-    ).generateCard();
-    cardSection.addItem(newCard);
-    addCardPopupInstance.close();
+    addCardPopupInstance.setLoadingState(true, 'Creando...');
+
+    api.addNewCard({
+      name: formData.title,
+      link: formData.link
+    })
+    .then(newCard => {
+      const card = new Card(
+        {
+          name: newCard.name,
+          link: newCard.link,
+          _id: newCard._id
+        },
+        '#card-template',
+        (src, alt) => imagePopupInstance.open({ src, alt })
+      ).generateCard();
+
+      cardSection.addItem(card);
+      addCardPopupInstance.close();
+    })
+    .catch(err => {
+      console.error('Error al agregar tarjeta:', err);
+    })
+    .finally(() => {
+      addCardPopupInstance.setLoadingState(false, 'Crear');
+    });
   }
 );
 
@@ -47,43 +114,24 @@ const imagePopupInstance = new PopupWithImage('#image-popup');
 
 const cardSection = new Section(
   {
-    items: [
-  {
-    name: "Valle de Yosemite",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/yosemite.jpg"
+    items: [],
+    renderer: (cardData) => {
+      const card = new Card(
+        {
+          name: cardData.name,
+          link: cardData.link,
+          _id: cardData._id,
+          isLiked: cardData.isLiked
+        },
+        '#card-template',
+        (src, alt) => imagePopupInstance.open({ src, alt}),
+        (cardId, isLiked) => api.toggleLike(cardId, isLiked)
+      ).generateCard();
+      cardSection.addItem(card);
+    }
   },
-  {
-    name: "Lago Louise",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lake-louise.jpg"
-  },
-  {
-    name: "Montañas Calvas",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/bald-mountains.jpg"
-  },
-  {
-    name: "Latemar",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/latemar.jpg"
-  },
-  {
-    name: "Parque Nacional de la Vanoise",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/vanoise.jpg"
-  },
-  {
-    name: "Lago di Braies",
-    link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lago.jpg"
-  }
-],
-renderer: (cardData) => {
-  const card = new Card(
-    cardData,
-    '#card-template',
-    (src, alt) => imagePopupInstance.open({ src, alt })
-  ).generateCard();
-  cardSection.addItem(card);
-}
-},
-'.elements'
-);
+  '.elements'
+)
 
 const profileFormValidator = new FormValidator(validationConfig, document.getElementById('profile-form'));
 const cardFormValidator = new FormValidator(validationConfig, document.getElementById('card-form'));
@@ -111,4 +159,41 @@ imagePopupInstance.setEventListeners();
 profileFormValidator.enableValidation();
 cardFormValidator.enableValidation();
 
-cardSection.renderItems();
+loadAllData()
+  .then(cardsData => {
+    console.log('Datos recibidos:', cardsData);
+    if (cardsData && cardsData.length > 0) {
+      cardSection.renderItems(cardsData);
+    } else {
+      const localCards = [
+        {
+          name: "Valle de Yosemite",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/yosemite.jpg"
+        },
+        {
+          name: "Lago Louise",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lake-louise.jpg"
+        },
+        {
+          name: "Montañas Calvas",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/bald-mountains.jpg"
+        },
+        {
+          name: "Latemar",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/latemar.jpg"
+        },
+        {
+          name: "Parque Nacional de la Vanoise",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/vanoise.jpg"
+        },
+        {
+          name: "Lago di Braies",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lago.jpg"
+        }
+      ];
+      cardSection.renderItems(localCards);
+    }
+  })
+  .catch(err => {
+    console.error('Error critico:', err);
+  });

@@ -30,8 +30,8 @@
         <section class="profile">
           <img
             src="./images/profile_image.jpg"
-            alt="Ilustración 'profile"
-            class="profile__image"
+            alt="Avatar del usuario"
+            class="profile__avatar"
           />
           <div class="profile__info">
             <div class="profile__name-container">
@@ -149,6 +149,15 @@
           >
             Crear
           </button>
+        </form>
+      </div>
+    </div>
+    <div class="popup" id="delete-card-popup">
+      <div class="popup__container">
+        <button type="button" class="popup__close" aria-label="Cerrar"></button>
+        <h2 class="popup__title">¿Estás seguro?</h2>
+        <form class="popup__form" id="delete-form">
+          <button type="submit" class="popup__save-button">Si</button>
         </form>
       </div>
     </div>

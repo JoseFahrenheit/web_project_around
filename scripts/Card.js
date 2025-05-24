@@ -1,9 +1,13 @@
 export class Card {
-  constructor(data, templateSelector, handleCardClick) {
+  constructor(data, templateSelector, handleCardClick, handleLikeClick) {
     this._name = data.name;
     this._link = data.link;
+    this._id = data._id;
+    this._isLiked = data.isLiked || false;
     this._templateSelector = templateSelector;
     this._handleCardClick = handleCardClick;
+    this._handleLikeClick = handleLikeClick;
+    this._likeButton = null;
   }
 
   _getTemplate() {
@@ -15,13 +19,26 @@ export class Card {
       this._handleCardClick(this._link, this._name);
     });
 
-    this._element.querySelector('.element__vector').addEventListener('click', (evt) => {
-      evt.target.classList.toggle('element__vector_active');
+    this._likeButton = this._element.querySelector('.element__vector');
+    this._likeButton.addEventListener('click', () => {
+      this._handleLikeClick(this._id, !this._isLiked)
+      .then(updatedCard => {
+        this._isLiked = updatedCard.isLiked;
+        this._updateLikeState();
+      });
     });
 
     this._element.querySelector('.element__delete').addEventListener('click', () => {
       this._element.remove();
     });
+  }
+
+  _updateLikeState() {
+    if (this._isLiked) {
+      this._likeButton.classList.add('element__vector_active');
+    } else {
+      this._likeButton.classList.remove('element__vector_active');
+    }
   }
 
   generateCard() {
@@ -31,6 +48,9 @@ export class Card {
     cardImage.src = this._link;
     cardImage.alt = this._name;
     this._element.querySelector('.element__paragraph').textContent = this._name;
+
+    this._likeButton = this._element.querySelector('.element__vector');
+    this._updateLikeState();
 
     this._setEventListeners();
 

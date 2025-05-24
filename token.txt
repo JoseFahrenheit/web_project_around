@@ -1,0 +1,36 @@
+{
+  "user": {
+    "name": "Jacques Cousteau",
+    "about": "Explorador",
+    "avatar": "https://practicum-content.s3.us-west-1.amazonaws.com/frontend-developer/common/avatar.jpg",
+    "_id": "a0632d07c2b0ad6e03ce6006"
+  },
+  "token": "02c5cb3d-f95a-461a-a48e-8ed3895c99a5"
+}
+
+const localCards = [
+        {
+          name: "Valle de Yosemite",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/yosemite.jpg"
+        },
+        {
+          name: "Lago Louise",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lake-louise.jpg"
+        },
+        {
+          name: "Montañas Calvas",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/bald-mountains.jpg"
+        },
+        {
+          name: "Latemar",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/latemar.jpg"
+        },
+        {
+          name: "Parque Nacional de la Vanoise",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/vanoise.jpg"
+        },
+        {
+          name: "Lago di Braies",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lago.jpg"
+        }
+      ];
