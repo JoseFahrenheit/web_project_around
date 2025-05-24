@@ -39,16 +39,24 @@ function loadAllData() {
     userInfo.setUserInfo({
       name: userData.name,
       job: userData.about,
-      avatar: userData.avatar
+      avatar: userData.avatar,
+      userId: userData._id
     });
-    return cardsData;
+    const processedCards = cardsData.map(card => ({
+      ...card,
+      isLiked: card.likes.some(like => like._id === userData._id),
+      userId: userData._id,
+      ownerId: card.owner._id
+    }));
+    return processedCards;
   })
   .catch(err => {
     console.error('Error al cargar datos:', err);
     userInfo.setUserInfo({
       name: 'Jacques Cousteau',
       job: 'Explorador',
-      avatar: 'https://practicum-content.s3.us-west-1.amazonaws.com/frontend-developer/common/avatar.jpg'
+      avatar: 'https://practicum-content.s3.us-west-1.amazonaws.com/frontend-developer/common/avatar.jpg',
+      userId: 'default'
     });
     return [];
   });
@@ -89,14 +97,21 @@ const addCardPopupInstance = new PopupWithForm(
       link: formData.link
     })
     .then(newCard => {
+      const userData = userInfo.getUserInfo();
       const card = new Card(
         {
           name: newCard.name,
           link: newCard.link,
-          _id: newCard._id
+          _id: newCard._id,
+          likes:  newCard.likes,
+          isLiked: false,
+          userId: userData.userId,
+          ownerId: userData._id
         },
         '#card-template',
-        (src, alt) => imagePopupInstance.open({ src, alt })
+        (src, alt) => imagePopupInstance.open({ src, alt }),
+        (cardId, isLiked) => api.toggleLike(cardId, isLiked),
+        (cardId, cardElement) =>deleteCardPopupInstance.open(cardId, cardElement)
       ).generateCard();
 
       cardSection.addItem(card);
@@ -140,7 +155,10 @@ const cardSection = new Section(
           name: cardData.name,
           link: cardData.link,
           _id: cardData._id,
-          isLiked: cardData.isLiked
+          likes: cardData.likes,
+          isLiked: cardData.isLiked,
+          userId: cardData.userId,
+          ownerId: cardData.ownerId
         },
         '#card-template',
         (src, alt) => imagePopupInstance.open({ src, alt}),
