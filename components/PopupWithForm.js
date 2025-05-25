@@ -22,9 +22,11 @@ export class PopupWithForm extends Popup {
     if (isLoading) {
       this._submitButton.textContent = loadingText;
       this._submitButton.disabled = true;
+      this._submitButton.classList.add('popup__save-button_loading');
     } else {
       this._submitButton.textContent = this._submitButtonText;
       this._submitButton.disabled = false;
+      this._submitButton.classList.remove('popup__save-button_loading');
     }
   }
 
