@@ -65,7 +65,7 @@ function loadAllData() {
 const profilePopupInstance = new PopupWithForm(
   '#edit-profile-popup',
   (formData) => {
-    profilePopupInstance.setLoadingState(true);
+    profilePopupInstance.setLoadingState(true, 'Guardando...');
     api.updateUserInfo({
       name: formData.name,
       about: formData.about
@@ -82,7 +82,7 @@ const profilePopupInstance = new PopupWithForm(
       console.error('Error al actualizar perfil:', err);
     })
     .finally(() => {
-      profilePopupInstance.setLoadingState(false);
+      profilePopupInstance.setLoadingState(false, 'Guardar');
     });
   }
 );
@@ -129,7 +129,7 @@ const addCardPopupInstance = new PopupWithForm(
 const deleteCardPopupInstance = new PopupWithConfirmation(
   '#delete-card-popup',
   (cardId, cardElement) => {
-    deleteCardPopupInstance.setLoadingState(true);
+    deleteCardPopupInstance.setLoadingState(true, 'Eliminando...');
     api.deleteCard(cardId)
       .then(() => {
         cardElement.remove();
@@ -139,7 +139,7 @@ const deleteCardPopupInstance = new PopupWithConfirmation(
         console.error('Error al eliminar tarjeta:', err);
       })
       .finally(() => {
-        deleteCardPopupInstance.setLoadingState(false);
+        deleteCardPopupInstance.setLoadingState(false, 'Si');
       });
   }
 );
@@ -147,10 +147,12 @@ const deleteCardPopupInstance = new PopupWithConfirmation(
 const avatarPopupInstance = new PopupWithForm(
   '#edit-avatar-popup',
   (formData) => {
-    avatarPopupInstance.setLoadingState(true);
+    avatarPopupInstance.setLoadingState(true, 'Guardando...');
     api.updateAvatar(formData.avatar)
       .then(updatedData => {
         userInfo.setUserInfo({
+          name: updatedData.name,
+          job: updatedData.about,
           avatar: updatedData.avatar
         });
         avatarPopupInstance.close();
@@ -159,7 +161,7 @@ const avatarPopupInstance = new PopupWithForm(
         console.error('Error al actualizar avatar:', err);
       })
       .finally(() => {
-        avatarPopupInstance.setLoadingState(false);
+        avatarPopupInstance.setLoadingState(false, 'Guardar');
       });
   }
 );

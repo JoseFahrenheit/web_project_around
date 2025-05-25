@@ -5,16 +5,27 @@ export class PopupWithForm extends Popup {
     super(popupSelector)
     this._handleFormSubmit = handleFormSubmit;
     this._form = this._popup.querySelector('.popup__form');
-    this._inputList = this._form.querySelectorAll('.popup__input');
     this._submitButton = this._form.querySelector('.popup__save-button');
+    this._submitButtonText = this._submitButton.textContent;
+    this._inputs = this._form.querySelectorAll('.popup__input');
   }
 
   _getInputValues() {
-    const inputValues = {};
-    this._inputList.forEach(input => {
-      inputValues[input.name] = input.value;
+    const values = {};
+    this._inputs.forEach(input => {
+      values[input.name] = input.value;
     });
-    return inputValues;
+    return values;
+  }
+
+  setLoadingState(isLoading, loadingText = 'Guardando...') {
+    if (isLoading) {
+      this._submitButton.textContent = loadingText;
+      this._submitButton.disabled = true;
+    } else {
+      this._submitButton.textContent = this._submitButtonText;
+      this._submitButton.disabled = false;
+    }
   }
 
   setEventListeners() {
@@ -25,14 +36,8 @@ export class PopupWithForm extends Popup {
     });
   }
 
-  setLoadingState(isLoading, buttonText = 'Guardar') {
-    this._submitButton.textContent = isLoading ? 'Guardando...' : buttonText;
-    this._submitButton.disabled = isLoading;
-  }
-
   close() {
     super.close();
     this._form.reset();
-    this._setLoadingState(false);
   }
 }
