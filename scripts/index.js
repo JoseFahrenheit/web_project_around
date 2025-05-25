@@ -144,6 +144,26 @@ const deleteCardPopupInstance = new PopupWithConfirmation(
   }
 );
 
+const avatarPopupInstance = new PopupWithForm(
+  '#edit-avatar-popup',
+  (formData) => {
+    avatarPopupInstance.setLoadingState(true);
+    api.updateAvatar(formData.avatar)
+      .then(updatedData => {
+        userInfo.setUserInfo({
+          avatar: updatedData.avatar
+        });
+        avatarPopupInstance.close();
+      })
+      .catch(err => {
+        console.error('Error al actualizar avatar:', err);
+      })
+      .finally(() => {
+        avatarPopupInstance.setLoadingState(false);
+      });
+  }
+);
+
 const imagePopupInstance = new PopupWithImage('#image-popup');
 
 const cardSection = new Section(
@@ -165,7 +185,7 @@ const cardSection = new Section(
         (cardId, isLiked) => api.toggleLike(cardId, isLiked),
         (cardId, cardElement) => deleteCardPopupInstance.open(cardId, cardElement)
       ).generateCard();
-      cardSection.addItem(card);
+      cardSection.addItem(card, false);
     }
   },
   '.elements'
@@ -173,6 +193,7 @@ const cardSection = new Section(
 
 const profileFormValidator = new FormValidator(validationConfig, document.getElementById('profile-form'));
 const cardFormValidator = new FormValidator(validationConfig, document.getElementById('card-form'));
+const avatarFormValidator = new FormValidator(validationConfig, document.getElementById('avatar-form'));
 
 const openProfilePopup = () => {
   const currentUserInfo = userInfo.getUserInfo();
@@ -187,16 +208,24 @@ const openAddCardPopup = () => {
   cardFormValidator.resetValidation();
 };
 
+const openAvatarPopup = () => {
+  avatarFormValidator.resetValidation();
+  avatarPopupInstance.open();
+}
+
 document.querySelector('.profile__edit').addEventListener('click', openProfilePopup);
 document.querySelector('.profile__add-button').addEventListener('click', openAddCardPopup);
+document.querySelector('.profile__avatar-container').addEventListener('click', openAvatarPopup);
 
 profilePopupInstance.setEventListeners();
 addCardPopupInstance.setEventListeners();
 imagePopupInstance.setEventListeners();
 deleteCardPopupInstance.setEventListeners();
+avatarPopupInstance.setEventListeners();
 
 profileFormValidator.enableValidation();
 cardFormValidator.enableValidation();
+avatarFormValidator.enableValidation();
 
 loadAllData()
   .then(cardsData => {

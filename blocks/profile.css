@@ -11,6 +11,35 @@
   height: 155.25px;
   object-fit: cover;
   border-radius: 50%;
+  transition: opacity 0.3s ease;
+}
+
+.profile__avatar-container {
+  position: relative;
+  width: 168.75px;
+  height: 155.25px;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden; /* Para mantener el borde redondeado */
+}
+
+.profile__avatar-container:hover .profile__avatar {
+  opacity: 0.8;
+}
+
+.profile__avatar-container:hover::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente oscuro */
+  background-image: url('../images/profile_Vector.png'); /* Tu icono de edición */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 26px; /* Tamaño adecuado para el icono */
+  border-radius: 50%; /* Mantiene la forma circular */
 }
 
 .profile__info {
@@ -117,6 +146,35 @@
     height: 130px;
     object-fit: cover;
     border-radius: 50%;
+    transition: opacity 0.3s ease;
+  }
+
+  .profile__avatar-container {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    cursor: pointer;
+    border-radius: 50%;
+    overflow: hidden; /* Para mantener el borde redondeado */
+  }
+
+  .profile__avatar-container:hover .profile__avatar {
+    opacity: 0.8;
+  }
+
+  .profile__avatar-container:hover::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente oscuro */
+    background-image: url('../images/profile_Vector.png'); /* Tu icono de edición */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 26px; /* Tamaño adecuado para el icono */
+    border-radius: 50%; /* Mantiene la forma circular */
   }
 
   .profile__info {
@@ -227,6 +285,35 @@
     height: 120px;
     object-fit: cover;
     border-radius: 50%;
+    transition: opacity 0.3s ease;
+  }
+
+  .profile__avatar-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+    border-radius: 50%;
+    overflow: hidden; /* Para mantener el borde redondeado */
+  }
+
+  .profile__avatar-container:hover .profile__avatar {
+    opacity: 0.8;
+  }
+
+  .profile__avatar-container:hover::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Fondo semitransparente oscuro */
+    background-image: url('../images/profile_Vector.png'); /* Tu icono de edición */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 26px; /* Tamaño adecuado para el icono */
+    border-radius: 50%; /* Mantiene la forma circular */
   }
 
   .profile__info {

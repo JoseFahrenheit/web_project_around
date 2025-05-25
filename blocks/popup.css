@@ -171,6 +171,21 @@
   margin-top: 0;
 }
 
+#edit-avatar-popup .popup__container {
+  max-width: 430px;
+  max-height: 272px;
+}
+
+#edit-avatar-popup .popup__title {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+#edit-avatar-popup .popup__save-button {
+  width: 100%;
+  margin-top: 0;
+}
+
 @media screen and (min-width: 544px) and (max-width: 1023px) {
   .popup {
     width: 100%;
@@ -312,6 +327,21 @@
   }
 
   #delete-card-popup .popup__save-button {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  #edit-avatar-popup .popup__container {
+    max-width: 430px;
+    max-height: 272px;
+  }
+
+  #edit-avatar-popup .popup__title {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  #edit-avatar-popup .popup__save-button {
     width: 100%;
     margin-top: 0;
   }
@@ -458,6 +488,21 @@
   }
 
   #delete-card-popup .popup__save-button {
+    width: 100%;
+    margin-top: 0;
+  }
+
+  #edit-avatar-popup .popup__container {
+    max-width: 430px;
+    max-height: 272px;
+  }
+
+  #edit-avatar-popup .popup__title {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  #edit-avatar-popup .popup__save-button {
     width: 100%;
     margin-top: 0;
   }

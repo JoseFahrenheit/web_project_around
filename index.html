@@ -28,11 +28,13 @@
       </header>
       <main class="content">
         <section class="profile">
-          <img
-            src="./images/profile_image.jpg"
-            alt="Avatar del usuario"
-            class="profile__avatar"
-          />
+          <div class="profile__avatar-container">
+            <img
+              src="./images/profile_image.jpg"
+              alt="Avatar del usuario"
+              class="profile__avatar"
+            />
+          </div>
           <div class="profile__info">
             <div class="profile__name-container">
               <h2 class="profile__name">Jacques Cousteau</h2>
@@ -166,6 +168,33 @@
         <button type="button" class="popup__close" aria-label="Cerrar"></button>
         <img src="" alt="Imagen ampliada" class="popup__image" />
         <p class="popup__caption"></p>
+      </div>
+    </div>
+    <div class="popup" id="edit-avatar-popup">
+      <div class="popup__container">
+        <button type="button" class="popup__close" aria-label="Cerrar"></button>
+        <h2 class="popup__title">Cambiar foto de Perfil</h2>
+        <form class="popup__form" id="avatar-form" novalidate>
+          <div style="position: relative; height: 57.26">
+            <input
+              type="url"
+              name="avatar"
+              id="avatar-input"
+              class="popup__input"
+              placeholder="Enlace de imagen"
+              required
+              title="Por favor, introduce una dirección web"
+            />
+            <span class="popup__error avatar-input-error"></span>
+          </div>
+          <button
+            type="submit"
+            class="popup__save-button popup__button_disabled"
+            disabled
+          >
+            Guardar
+          </button>
+        </form>
       </div>
     </div>
     <template id="card-template">
