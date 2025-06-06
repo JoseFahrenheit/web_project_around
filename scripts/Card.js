@@ -31,7 +31,7 @@ export class Card {
       this._handleLikeClick(this._id, !this._isLiked)
         .then((updatedData) => {
           this._isLiked = updatedData.isLiked;
-          this._like = updatedData.likes;
+          this._isLiked = this._likes.some(like => like && like._id === this._userId);
           this._updateLikeState();
         })
         .catch((err) => {
