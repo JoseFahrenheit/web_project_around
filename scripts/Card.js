@@ -3,8 +3,8 @@ export class Card {
     this._name = data.name;
     this._link = data.link;
     this._id = data._id;
-    this._isLiked = Boolean(data.isLiked);
     this._likes = data.likes || [];
+    this._isLiked = data.isLiked;
     this._userId = data.userId;
     this._ownerId = data.ownerId;
     this._templateSelector = templateSelector;
@@ -14,7 +14,11 @@ export class Card {
   }
 
   _getTemplate() {
-    return document.querySelector(this._templateSelector).content.querySelector('.element').cloneNode(true);
+    return document
+      .querySelector(this._templateSelector)
+      .content
+      .querySelector('.element')
+      .cloneNode(true);
   }
 
   _setEventListeners() {
@@ -26,11 +30,9 @@ export class Card {
       e.preventDefault();
       this._handleLikeClick(this._id, !this._isLiked)
         .then((updatedData) => {
-          if (updatedData && Array.isArray(updatedData.likes)) {
-            this._likes = updatedData.likes;
-            this._isLiked = this._likes.some(like => like._id === this._userId);
-            this._updateLikeState();
-          }
+          this._isLiked = updatedData.isLiked;
+          this._like = updatedData.likes;
+          this._updateLikeState();
         })
         .catch((err) => {
           console.error('Error al actualizar like:', err);
@@ -74,3 +76,4 @@ export class Card {
     return this._element;
   }
 }
+

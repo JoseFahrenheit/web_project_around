@@ -77,19 +77,12 @@ const createCard = (cardData) => {
   }, '#card-template',
     (src, alt) => imagePopupInstance.open({ src, alt }),
     (cardId, isLiked) => {
-      return api.toggleLike(cardId, isLiked).then(updatedCard => {
-        const updatedLikes = updatedCard.likes || [];
-        return {
-          likes: updatedLikes,
-          isLiked: updatedLikes.some(like => like._id === currentUserId)
-        };
-      });
+      return api.toggleLike(cardId, isLiked);
     },
     (cardId, cardElement) => deleteCardPopupInstance.open(cardId, cardElement)
   );
-
   return card.generateCard();
-};
+}
 
 const profilePopupInstance = new PopupWithForm('#edit-profile-popup', (formData) => {
   profilePopupInstance.setLoadingState(true, 'Guardando...');

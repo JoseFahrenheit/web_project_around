@@ -1,5 +1,5 @@
 export class Api {
-  constructor({ baseUrl, headers}) {
+  constructor({ baseUrl, headers }) {
     this._baseUrl = baseUrl;
     this._headers = headers;
   }
@@ -8,7 +8,7 @@ export class Api {
     if (res.ok) {
       return res.json();
     }
-    return Promise.reject(`Error: ${res.status}`);
+    return res.json().then(err => Promise.reject(`Error: ${res.status} - ${err.message}`));
   }
 
   getInitialCards() {
@@ -48,7 +48,7 @@ export class Api {
   toggleLike(cardId, isLiked) {
     const method = isLiked ? 'PUT' : 'DELETE';
     return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-      method: method,
+      method,
       headers: this._headers
     }).then(this._checkResponse);
   }
