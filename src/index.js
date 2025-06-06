@@ -7,6 +7,8 @@ import { UserInfo } from "../components/UserInfo.js";
 import { Api } from "../components/Api.js";
 import { PopupWithConfirmation } from "../components/PopupWithConfirmation.js";
 
+let currentUserId = null;
+
 const validationConfig = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -19,7 +21,7 @@ const validationConfig = {
 const api = new Api({
   baseUrl: "https://around-api.es.tripleten-services.com/v1",
   headers: {
-    authorization: "02c5cb3d-f95a-461a-a48e-8ed3895c99a5",
+    authorization: "8c499a36-0b8d-4bbd-9f0f-54edf411ab6d",
     "Content-Type": "application/json"
   }
 });
@@ -36,162 +38,123 @@ function loadAllData() {
     api.getInitialCards()
   ])
   .then(([userData, cardsData]) => {
+    currentUserId = userData._id;
+
     userInfo.setUserInfo({
       name: userData.name,
       job: userData.about,
       avatar: userData.avatar,
-      userId: userData._id
+      userId: currentUserId
     });
-    const processedCards = cardsData.map(card => ({
-      ...card,
-      isLiked: card.likes.some(like => like._id === userData._id),
-      userId: userData._id,
-      ownerId: card.owner._id
-    }));
-    return processedCards;
+
+    return cardsData;
   })
   .catch(err => {
     console.error('Error al cargar datos:', err);
+    currentUserId = 'default-id';
     userInfo.setUserInfo({
       name: 'Jacques Cousteau',
       job: 'Explorador',
       avatar: 'https://practicum-content.s3.us-west-1.amazonaws.com/frontend-developer/common/avatar.jpg',
-      userId: 'default'
+      userId: currentUserId
     });
     return [];
   });
 }
 
-const profilePopupInstance = new PopupWithForm(
-  '#edit-profile-popup',
-  (formData) => {
-    profilePopupInstance.setLoadingState(true, 'Guardando...');
-    api.updateUserInfo({
-      name: formData.name,
-      about: formData.about
-    })
+const createCard = (cardData) => {
+  const likes = cardData.likes || [];
+  const ownerId = cardData.owner && cardData.owner._id ? cardData.owner._id : currentUserId;
+
+  const card = new Card({
+    name: cardData.name,
+    link: cardData.link,
+    _id: cardData._id,
+    likes: likes,
+    isLiked: likes.some(like => like._id === currentUserId),
+    userId: currentUserId,
+    ownerId: ownerId
+  }, '#card-template',
+    (src, alt) => imagePopupInstance.open({ src, alt }),
+    (cardId, isLiked) => {
+      return api.toggleLike(cardId, isLiked).then(updatedCard => {
+        const updatedLikes = updatedCard.likes || [];
+        return {
+          likes: updatedLikes,
+          isLiked: updatedLikes.some(like => like._id === currentUserId)
+        };
+      });
+    },
+    (cardId, cardElement) => deleteCardPopupInstance.open(cardId, cardElement)
+  );
+
+  return card.generateCard();
+};
+
+const profilePopupInstance = new PopupWithForm('#edit-profile-popup', (formData) => {
+  profilePopupInstance.setLoadingState(true, 'Guardando...');
+  api.updateUserInfo({ name: formData.name, about: formData.about })
     .then(updatedData => {
       userInfo.setUserInfo({
         name: updatedData.name,
         job: updatedData.about,
-        avatar: updatedData.avatar
+        avatar: updatedData.avatar,
+        userId: currentUserId
       });
       profilePopupInstance.close();
     })
-    .catch(err => {
-      console.error('Error al actualizar perfil:', err);
-    })
-    .finally(() => {
-      profilePopupInstance.setLoadingState(false, 'Guardar');
-    });
-  }
-);
+    .catch(err => console.error('Error al actualizar perfil:', err))
+    .finally(() => profilePopupInstance.setLoadingState(false, 'Guardar'));
+});
 
-const addCardPopupInstance = new PopupWithForm(
-  '#add-element-popup',
-  (formData) => {
-    addCardPopupInstance.setLoadingState(true, 'Creando...');
-
-    api.addNewCard({
-      name: formData.title,
-      link: formData.link
-    })
+const addCardPopupInstance = new PopupWithForm('#add-element-popup', (formData) => {
+  addCardPopupInstance.setLoadingState(true, 'Creando...');
+  api.addNewCard({ name: formData.title, link: formData.link })
     .then(newCard => {
-      const userData = userInfo.getUserInfo();
-      const card = new Card(
-        {
-          name: newCard.name,
-          link: newCard.link,
-          _id: newCard._id,
-          likes:  newCard.likes,
-          isLiked: false,
-          userId: userData.userId,
-          ownerId: userData._id
-        },
-        '#card-template',
-        (src, alt) => imagePopupInstance.open({ src, alt }),
-        (cardId, isLiked) => api.toggleLike(cardId, isLiked),
-        (cardId, cardElement) =>deleteCardPopupInstance.open(cardId, cardElement)
-      ).generateCard();
-
-      cardSection.addItem(card);
+      const cardElement = createCard(newCard);
+      cardSection.addItem(cardElement);
       addCardPopupInstance.close();
     })
-    .catch(err => {
-      console.error('Error al agregar tarjeta:', err);
+    .catch(err => console.error('Error al agregar tarjeta:', err))
+    .finally(() => addCardPopupInstance.setLoadingState(false, 'Crear'));
+});
+
+const deleteCardPopupInstance = new PopupWithConfirmation('#delete-card-popup', (cardId, cardElement) => {
+  deleteCardPopupInstance.setLoadingState(true, 'Eliminando...');
+  api.deleteCard(cardId)
+    .then(() => {
+      cardElement.remove();
+      deleteCardPopupInstance.close();
     })
-    .finally(() => {
-      addCardPopupInstance.setLoadingState(false, 'Crear');
-    });
-  }
-);
+    .catch(err => console.error('Error al eliminar tarjeta:', err))
+    .finally(() => deleteCardPopupInstance.setLoadingState(false, 'Si'));
+});
 
-const deleteCardPopupInstance = new PopupWithConfirmation(
-  '#delete-card-popup',
-  (cardId, cardElement) => {
-    deleteCardPopupInstance.setLoadingState(true, 'Eliminando...');
-    api.deleteCard(cardId)
-      .then(() => {
-        cardElement.remove();
-        deleteCardPopupInstance.close();
-      })
-      .catch(err => {
-        console.error('Error al eliminar tarjeta:', err);
-      })
-      .finally(() => {
-        deleteCardPopupInstance.setLoadingState(false, 'Si');
+const avatarPopupInstance = new PopupWithForm('#edit-avatar-popup', (formData) => {
+  avatarPopupInstance.setLoadingState(true, 'Guardando...');
+  api.updateAvatar(formData.avatar)
+    .then(updatedData => {
+      userInfo.setUserInfo({
+        name: updatedData.name,
+        job: updatedData.about,
+        avatar: updatedData.avatar,
+        userId: currentUserId
       });
-  }
-);
-
-const avatarPopupInstance = new PopupWithForm(
-  '#edit-avatar-popup',
-  (formData) => {
-    avatarPopupInstance.setLoadingState(true, 'Guardando...');
-    api.updateAvatar(formData.avatar)
-      .then(updatedData => {
-        userInfo.setUserInfo({
-          name: updatedData.name,
-          job: updatedData.about,
-          avatar: updatedData.avatar
-        });
-        avatarPopupInstance.close();
-      })
-      .catch(err => {
-        console.error('Error al actualizar avatar:', err);
-      })
-      .finally(() => {
-        avatarPopupInstance.setLoadingState(false, 'Guardar');
-      });
-  }
-);
+      avatarPopupInstance.close();
+    })
+    .catch(err => console.error('Error al actualizar avatar:', err))
+    .finally(() => avatarPopupInstance.setLoadingState(false, 'Guardar'));
+});
 
 const imagePopupInstance = new PopupWithImage('#image-popup');
 
-const cardSection = new Section(
-  {
-    items: [],
-    renderer: (cardData) => {
-      const card = new Card(
-        {
-          name: cardData.name,
-          link: cardData.link,
-          _id: cardData._id,
-          likes: cardData.likes,
-          isLiked: cardData.isLiked,
-          userId: cardData.userId,
-          ownerId: cardData.ownerId
-        },
-        '#card-template',
-        (src, alt) => imagePopupInstance.open({ src, alt}),
-        (cardId, isLiked) => api.toggleLike(cardId, isLiked),
-        (cardId, cardElement) => deleteCardPopupInstance.open(cardId, cardElement)
-      ).generateCard();
-      cardSection.addItem(card, false);
-    }
-  },
-  '.elements'
-)
+const cardSection = new Section({
+  items: [],
+  renderer: (cardData) => {
+    const cardElement = createCard(cardData);
+    cardSection.addItem(cardElement, false);
+  }
+}, '.elements');
 
 const profileFormValidator = new FormValidator(validationConfig, document.getElementById('profile-form'));
 const cardFormValidator = new FormValidator(validationConfig, document.getElementById('card-form'));
@@ -213,7 +176,7 @@ const openAddCardPopup = () => {
 const openAvatarPopup = () => {
   avatarFormValidator.resetValidation();
   avatarPopupInstance.open();
-}
+};
 
 document.querySelector('.profile__edit').addEventListener('click', openProfilePopup);
 document.querySelector('.profile__add-button').addEventListener('click', openAddCardPopup);
@@ -231,39 +194,26 @@ avatarFormValidator.enableValidation();
 
 loadAllData()
   .then(cardsData => {
-    console.log('Datos recibidos:', cardsData);
     if (cardsData && cardsData.length > 0) {
       cardSection.renderItems(cardsData);
     } else {
       const localCards = [
         {
           name: "Valle de Yosemite",
-          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/yosemite.jpg"
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/yosemite.jpg",
+          likes: [],
+          owner: { _id: currentUserId },
+          _id: '1'
         },
         {
           name: "Lago Louise",
-          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lake-louise.jpg"
-        },
-        {
-          name: "Montañas Calvas",
-          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/bald-mountains.jpg"
-        },
-        {
-          name: "Latemar",
-          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/latemar.jpg"
-        },
-        {
-          name: "Parque Nacional de la Vanoise",
-          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/vanoise.jpg"
-        },
-        {
-          name: "Lago di Braies",
-          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lago.jpg"
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lake-louise.jpg",
+          likes: [],
+          owner: { _id: currentUserId },
+          _id: '2'
         }
       ];
       cardSection.renderItems(localCards);
     }
   })
-  .catch(err => {
-    console.error('Error critico:', err);
-  });
+  .catch(err => console.error('Error crítico:', err));

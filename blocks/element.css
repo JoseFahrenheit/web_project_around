@@ -78,14 +78,16 @@
   border: none;
   cursor: pointer;
   transition: opacity 0.3s ease;
+  opacity: 0.5;
 }
 
 .element__vector:hover {
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
 .element__vector_active {
   background-image: url('../images/Union.png');
+  opacity: 1;
 }
 
 @media screen and (min-width: 544px) and (max-width: 1023px) {
