@@ -26,12 +26,11 @@ export class Card {
       this._handleCardClick(this._link, this._name);
     });
 
-    this._likeButton.addEventListener('click', (e) => {
-      e.preventDefault();
+    this._likeButton.addEventListener('click', () => {
       this._handleLikeClick(this._id, !this._isLiked)
         .then((updatedData) => {
+          this._likes = updatedData.likes;
           this._isLiked = updatedData.isLiked;
-          this._isLiked = this._likes.some(like => like && like._id === this._userId);
           this._updateLikeState();
         })
         .catch((err) => {
@@ -76,4 +75,3 @@ export class Card {
     return this._element;
   }
 }
-

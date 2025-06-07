@@ -71,7 +71,7 @@ const createCard = (cardData) => {
     link: cardData.link,
     _id: cardData._id,
     likes: likes,
-    isLiked: likes.some(like => like._id === currentUserId),
+    isLiked: cardData.isLiked,
     userId: currentUserId,
     ownerId: ownerId
   }, '#card-template',
@@ -204,6 +204,34 @@ loadAllData()
           likes: [],
           owner: { _id: currentUserId },
           _id: '2'
+        },
+        {
+          name: "Montañas Calvas",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/bald-mountains.jpg",
+          likes: [],
+          owner: { _id: currentUserId },
+          _id: '3'
+        },
+        {
+          name: "Latemar",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/latemar.jpg",
+          likes: [],
+          owner: { _id: currentUserId },
+          _id: '4'
+        },
+        {
+          name: "Parque Nacional de la Vanoise",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/vanoise.jpg",
+          likes: [],
+          owner: { _id: currentUserId },
+          _id: '5'
+        },
+        {
+          name: "Lago di Braies",
+          link: "https://practicum-content.s3.us-west-1.amazonaws.com/new-markets/WEB_sprint_5/ES/lago.jpg",
+          likes: [],
+          owner: { _id: currentUserId },
+          _id: '6'
         }
       ];
       cardSection.renderItems(localCards);
