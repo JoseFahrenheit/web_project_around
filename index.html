@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Proyecto de Figma" />
+    <meta name="author" content="José Carlos Hernández Calderón" />
+    <meta name="keywords" content="Alrededor de los EE.UU." />
+    <title>Alrededor de los EE.UU.</title>
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="stylesheet" href="./pages/index.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="header">
+        <nav class="nav">
+          <img
+            src="./images/Vector.png"
+            alt="Ilustración 'Vector'"
+            class="nav__vector"
+          />
+          <img
+            src="./images/Line.png"
+            alt="Ilustración 'Linea'"
+            class="nav__linea"
+          />
+        </nav>
+      </header>
+      <main class="content">
+        <section class="profile">
+          <img
+            src="./images/profile_image.jpg"
+            alt="Ilustración 'profile"
+            class="profile__image"
+          />
+          <div class="profile__info">
+            <div class="profile__name-container">
+              <h2 class="profile__name">Jacques Cousteau</h2>
+              <div class="profile__edit">
+                <img
+                  src="./images/profile_Rectangle.png"
+                  alt="Ilustración 'Rectangulo'"
+                  class="profile__rectangle"
+                />
+                <img
+                  src="./images/profile_Vector.png"
+                  alt="Ilustración 'profile Vector'"
+                  class="profile__vector"
+                />
+              </div>
+            </div>
+            <p class="profile__job">Explorador</p>
+          </div>
+          <div class="profile__add-button">
+            <img
+              src="./images/add_Vector.png"
+              alt="Ilustración 'add'"
+              class="profile__add-vector"
+            />
+            <img
+              src="./images/add_Rectangle.png"
+              alt="Ilustración 'Rectangulo'"
+              class="profile__add-rectangle"
+            />
+          </div>
+        </section>
+        <section class="elements"></section>
+      </main>
+      <footer class="footer">
+        <p class="footer__copyright">&copy; 2025 Around The U.S.</p>
+      </footer>
+    </div>
+    <div class="popup" id="edit-profile-popup">
+      <div class="popup__container">
+        <img
+          src="./images/close.png"
+          alt="Ilustración 'Close'"
+          class="popup__close"
+        />
+        <h2 class="popup__title">Editar Perfil</h2>
+        <form class="popup__form">
+          <input
+            type="text"
+            name="name"
+            class="popup__input"
+            placeholder="Nombre"
+            required
+          />
+          <input
+            type="text"
+            name="about"
+            class="popup__input"
+            placeholder="Acerca de mí"
+            required
+          />
+          <button type="submit" class="popup__save-button" disabled>
+            Guardar
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="popup" id="add-element-popup">
+      <div class="popup__container">
+        <img
+          src="./images/close.png"
+          alt="Ilustración 'Close'"
+          class="popup__close"
+        />
+        <h2 class="popup__title">Nuevo Lugar</h2>
+        <form class="popup__form">
+          <input
+            type="text"
+            name="title"
+            class="popup__input"
+            placeholder="Título"
+            required
+          />
+          <input
+            type="text"
+            name="link"
+            class="popup__input"
+            placeholder="Enlace a la imagen"
+            required
+          />
+          <button type="submit" class="popup__save-button" disabled>
+            Crear
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="popup" id="image-popup">
+      <div class="popup__image-container">
+        <img src="./images/close.png" alt="cerrar" class="popup__close" />
+        <img src="" alt="Imagen ampliada" class="popup__image" />
+        <p class="popup__caption"></p>
+      </div>
+    </div>
+    <script src="./scripts/index.js"></script>
+  </body>
+</html>
