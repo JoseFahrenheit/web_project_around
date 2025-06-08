@@ -63,33 +63,54 @@ function createCard(cardData) {
   const cardElement = document.createElement('div');
   cardElement.classList.add('element');
 
-  cardElement.innerHTML = `
-  <img src="${cardData.link}" alt="${cardData.name}" class="element__image">
-  <button type="button" class="element__delete"></button>
-  <img src="./images/element_Rectangle.png" alt="Rectangulo" class="element__rectangle">
-  <div class="element__footer">
-  <p class="element__paragraph">${cardData.name}</p>
-  <img src="./images/element_Vector.svg" alt="Like" class="element__vector">
-  </div>
-  `;
+  const cardImage = document.createElement('img');
+  cardImage.classList.add('element__image');
+  cardImage.src = cardData.link;
+  cardImage.alt = cardData.name;
 
-  const cardImage = cardElement.querySelector('.element__image');
+  const deleteButton = document.createElement('button');
+  deleteButton.type = 'button';
+  deleteButton.classList.add('element__delete');
+
+  const rectangleImage = document.createElement('img');
+  rectangleImage.src = './images/element_Rectangle.png';
+  rectangleImage.alt = 'Rectangulo';
+  rectangleImage.classList.add('element__rectangle');
+
+  const footer = document.createElement('div');
+  footer.classList.add('element__footer');
+
+  const paragraph = document.createElement('p');
+  paragraph.classList.add('element__paragraph');
+  paragraph.textContent = cardData.name;
+
+  const likeButton = document.createElement('img');
+  likeButton.src = './images/element_Vector.svg';
+  likeButton.alt = 'Like';
+  likeButton.classList.add('element__vector');
+
   cardImage.addEventListener('click', () => {
     openImagePopup(cardData.link, cardData.name);
   });
 
-  const likeButton = cardElement.querySelector('.element__vector');
   likeButton.addEventListener('click', () => {
     likeButton.classList.toggle('element__vector_active');
     likeButton.src = likeButton.classList.contains('element__vector_active')
-    ? './images/Union.png'
-    : './images/element_vector.svg';
+      ? './images/Union.png'
+      : './images/element_Vector.svg';
   });
 
-  const deleteButton = cardElement.querySelector('.element__delete');
   deleteButton.addEventListener('click', () => {
     cardElement.remove();
   });
+
+  footer.appendChild(paragraph);
+  footer.appendChild(likeButton);
+
+  cardElement.appendChild(cardImage);
+  cardElement.appendChild(deleteButton);
+  cardElement.appendChild(rectangleImage);
+  cardElement.appendChild(footer);
 
   return cardElement;
 }
